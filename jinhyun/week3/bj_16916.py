@@ -1,35 +1,27 @@
 import sys
 
-S = list(sys.stdin.readline().split()[0])
-P = list(sys.stdin.readline().split()[0])
-S_len = len(S)
-P_len = len(P)
-idx_P = 0
-idx_S = 0
+S = sys.stdin.readline().split()[0]
+P = sys.stdin.readline().split()[0]
+
+len_P = len(P)
+len_S = len(S)
+hasing_P = 0
+hasing_S_sub = 0
 flag = False
 
-while True:
-    if idx_S >= S_len - P_len + 1:
-        break
-    if S[idx_S] == P[idx_P]:
-        count = 1
-        while True:
-            if count == P_len :
-                flag = True
-                break
-            else:
-                if S[idx_S+count] == P[idx_P+count]:
-                    count = count+1
-                else:
-                    idx_P = 0
-                    idx_S = idx_S + count
-                    print(idx_S)
-                    break
-    else :
-        idx_S = idx_S + 1
-    
-    if flag:
-        break
+
+for i in range(len_P):
+    hasing_P = (hasing_P + ord(P[i])*(2**(len_P-i-1)))%1000000
+    hasing_S_sub = (hasing_S_sub + ord(S[i])*(2**(len_P-i-1)))%1000000
+
+if hasing_P != hasing_S_sub:
+    for j in range(1, len_S - len_P):
+        hasing_S_sub = ((hasing_S_sub - ord(S[j-1])*(2**(len_P-1)))*2 + ord(S[j+len_P-1]))%1000000
+        if hasing_S_sub == hasing_P:
+            flag = True
+            break
+else:
+    flag = True
 
 if flag:
     print(1)
